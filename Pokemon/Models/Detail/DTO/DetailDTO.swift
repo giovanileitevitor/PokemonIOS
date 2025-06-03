@@ -7,4 +7,5 @@
 
 struct DetailDTO: Decodable {
     let types: [DetailTypeDTO]
+    let order: Int
 }

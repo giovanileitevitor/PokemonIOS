@@ -10,10 +10,7 @@ struct ContentView: View {
                 LazyVGrid(columns: [GridItem(), GridItem(), GridItem()]) {
                     ForEach(pokemons) { pokemon in
                         NavigationLink(destination: DetailView(pokemon: pokemon)) {
-                            Text(pokemon.data.name)
-                                .background(Color.red)
-                                .cornerRadius(6)
-                                .padding(10)
+                            PokemonCard(pokemon: pokemon)
                         }
                     }
                 }.padding()

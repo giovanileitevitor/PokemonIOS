@@ -6,11 +6,15 @@ struct PokemonCard: View {
     
     var body: some View {
         VStack() {
+            HStack(alignment: .center, spacing: 10){
+                Spacer()
+                Text("#" + "0001" ).padding(10)
+            }
             Spacer()
-            VStack(alignment: .leading) {
+            VStack(alignment: .leading){
                 Text(pokemon.data.name.capitalized)
+                    .font(.custom("HelveticaNeue", size: 16))
                     .font(.title)
-                    .font(.system(size: 24, weight: .bold, design: .default))
             }
             .frame(maxWidth: .infinity)
             .background(
@@ -20,15 +24,17 @@ struct PokemonCard: View {
             
         }
         .frame(maxWidth: .infinity)
-        .frame(height: 100)
+        .frame(height: 120)
         .background(
             AsyncImage(url: pokemon.cover.image)
         )
-        .cornerRadius(16)
+        .cornerRadius(8)
     }
 }
 
 #Preview {
-    PokemonCard(pokemon: .init(data: .init(name: "Pikachu"), cover: .init(indexImage: 1)))
+    PokemonCard(
+        pokemon: .init(data: .init(name: "Pikachu"),cover: .init(indexImage: 1))
+    )
 }
 

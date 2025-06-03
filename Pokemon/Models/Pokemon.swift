@@ -9,7 +9,6 @@ import Foundation
 
 struct Pokemon: Identifiable {
     let id = UUID()
-
     let data: PokemonDTO
     let cover: PokemonCover
 }
