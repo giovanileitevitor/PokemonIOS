@@ -4,35 +4,34 @@ struct ContentView: View {
     @State var pokemons: [Pokemon] = []
     
     var body: some View {
+        
         NavigationStack {
-            List(pokemons) { pokemon in
-                PokemonCard(pokemon: pokemon)
-                .background(
-                    NavigationLink(String()) {
-                        DetailView(pokemon: pokemon)
-                    }
-                    .opacity(0)
-                )
-                .listRowSeparator(.hidden)
-                .swipeActions(edge: .leading) {
-                    Button(action: { } ){
-                        Label("Delete", systemImage: "star")
-                    }
-                }
-            }.navigationTitle(Text("Pokedex"))
-            .listStyle(.plain)
-            .onAppear {
-                guard pokemons.isEmpty else { return }
-                Task {
-                    do {
-                        let pokemonsData = try await Network.shared.fetchList()
-                        pokemons = pokemonsData.enumerated().map { (index, data) in
-                            Pokemon(data: data, cover: .init(indexImage: index + 1))
+            ScrollView {
+                LazyVGrid(columns: [GridItem(), GridItem(), GridItem()]) {
+                    ForEach(pokemons) { pokemon in
+                        NavigationLink(destination: DetailView(pokemon: pokemon)) {
+                            Text(pokemon.data.name)
+                                .background(Color.red)
+                                .cornerRadius(6)
+                                .padding(10)
                         }
-                    } catch {
-                        print(error)
                     }
-                }
+                }.padding()
+                    .navigationTitle(Text("Pokedex"))
+                    .listStyle(.plain)
+                    .onAppear {
+                        guard pokemons.isEmpty else { return }
+                        Task {
+                            do {
+                                let pokemonsData = try await Network.shared.fetchList()
+                                pokemons = pokemonsData.enumerated().map { (index, data) in
+                                    Pokemon(data: data, cover: .init(indexImage: index + 1))
+                                }
+                            } catch {
+                                print(error)
+                            }
+                        }
+                    }
             }
         }
     }

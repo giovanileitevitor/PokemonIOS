@@ -10,3 +10,9 @@ import Foundation
 struct DetailTypeInfoDTO: Decodable {
     let name: String
 }
+
+//func convertTypeToColor(name: String) : Color {
+//    switch name {
+//        
+//    }
+//}
