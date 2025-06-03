@@ -1,10 +1,3 @@
-//
-//  Network.swift
-//  Pokemon
-//
-//  Created by Pietro Rischi Nunes on 06/05/25.
-//
-
 import Foundation
 
 enum NetworkErrors: Error {
@@ -13,29 +6,34 @@ enum NetworkErrors: Error {
 }
 
 class Network {
-//    func fetchList(completion: @escaping ([PokemonDTO]) -> Void) throws {
-//        guard let url = URL(string: "https://pokeapi.co/api/v2/pokemon") else {
-//            throw NetworkErrors.url
-//        }
-//        URLSession.shared.dataTask(with: url) { data, response, error in
-//            guard let data else { return }
-//            do {
-//                let result = try JSONDecoder().decode(ResultDTO.self, from: data)
-//                completion(result.results)
-//            } catch {
-//                throw NetworkErrors.request
-//            }
-//        }.resume()
-//    }
-
-    func fetchList() async throws -> [PokemonDTO] {
-        guard let url = URL(string: "https://pokeapi.co/api/v2/pokemon") else {
-            throw NetworkErrors.url
-        }
+    static let shared: Network = Network()
+    private init() {}
+    
+    private func fetch(url: URL?) async throws -> Data {
+        guard let url else { throw NetworkErrors.url }
         do {
             let (data, _) = try await URLSession.shared.data(for: .init(url: url))
+            return data
+        } catch {
+            throw NetworkErrors.request
+        }
+    }
+    
+    func fetchList() async throws -> [PokemonDTO] {
+        do {
+            let data = try await fetch(url: URL(string: "https://pokeapi.co/api/v2/pokemon"))
             let result = try JSONDecoder().decode(ResultDTO.self, from: data)
             return result.results
+        } catch {
+            throw NetworkErrors.request
+        }
+    }
+    
+    func fetchDetail(name: String) async throws -> DetailDTO {
+        do {
+            let data = try await fetch(url: URL(string: "https://pokeapi.co/api/v2/pokemon/\(name)"))
+            let result = try JSONDecoder().decode(DetailDTO.self, from: data)
+            return result
         } catch {
             throw NetworkErrors.request
         }

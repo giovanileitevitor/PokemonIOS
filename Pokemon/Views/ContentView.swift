@@ -1,10 +1,3 @@
-//
-//  ContentView.swift
-//  Pokemon
-//
-//  Created by Pietro Rischi Nunes on 29/04/25.
-//
-
 import SwiftUI
 
 struct ContentView: View {
@@ -21,13 +14,18 @@ struct ContentView: View {
                     .opacity(0)
                 )
                 .listRowSeparator(.hidden)
-            }
+                .swipeActions(edge: .leading) {
+                    Button(action: { } ){
+                        Label("Delete", systemImage: "star")
+                    }
+                }
+            }.navigationTitle(Text("Pokedex"))
             .listStyle(.plain)
             .onAppear {
                 guard pokemons.isEmpty else { return }
                 Task {
                     do {
-                        let pokemonsData = try await Network().fetchList()
+                        let pokemonsData = try await Network.shared.fetchList()
                         pokemons = pokemonsData.enumerated().map { (index, data) in
                             Pokemon(data: data, cover: .init(indexImage: index + 1))
                         }

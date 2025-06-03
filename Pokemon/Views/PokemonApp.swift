@@ -1,9 +1,3 @@
-//
-//  PokemonApp.swift
-//  Pokemon
-//
-//  Created by Pietro Rischi Nunes on 29/04/25.
-//
 
 import SwiftUI
 
@@ -15,3 +9,4 @@ struct PokemonApp: App {
         }
     }
 }
+
